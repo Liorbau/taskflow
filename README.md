@@ -1,4 +1,4 @@
-## A simple organization tasks manager.
+## A simple CLI organization tasks manager.
 
 Features:
 - Create and manage tasks with priority, status, and due dates
