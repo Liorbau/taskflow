@@ -65,8 +65,9 @@ def fire_employee(id: int):
 
         print("SUCCESS")
         return True
+    
     else:
-        print("Employee '{employee_name}' (ID: {id}) has been fired - SUCCESS")
+        print(print(f"Theres no such id {id}? - FAILED"))
         return False
     
 def promote_employee(id: int):
@@ -95,3 +96,7 @@ def promote_employee(id: int):
 
         print("Promotion succeeded to %s" % new_role.name)
         return True
+    
+    else:
+        print(f"Who is {id}? - FAILED")
+        return False
