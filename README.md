@@ -1,4 +1,4 @@
-A simple organization tasks manager.
+## A simple organization tasks manager.
 
 Features:
 - Create and manage tasks with priority, status, and due dates
@@ -10,6 +10,3 @@ Features:
 - API or web interface
 - JSON file persistence
 - User roles and permissions
-
-
-ChatGPT said:
