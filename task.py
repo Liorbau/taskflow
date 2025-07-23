@@ -25,6 +25,37 @@ class Task:
     creation_date: datetime
     due_date: datetime
 
+#Getters + Setters
+def get_task_status(task):
+    return task.Status
+
+def set_status(task):
+    if get_task_status(task) == Status.WAITING:
+        task.status = Status.WORKING
+        print(f"Status of task {task.id} changed to WORKING")
+        return 
+    
+    elif get_task_status(task) == Status.WORKING:
+        task.status = Status.COMPLETED
+
+        with open("data/tasks_archive", "a", encoding="utf-8") as archive:
+            json.dump(task.__dict__, archive)
+            archive.write("\n")
+
+            tasks = load_tasks()
+            key = str(task.id)
+            if key in tasks:
+                del tasks[key]
+                with open("data/tasks.json", "w", encoding="utf-8") as tasks_file:
+                    json.dump(tasks, tasks_file, indent=4)
+
+        print(f"Task {task.id} completed and archived.")
+        return
+    
+    else:
+        raise ValueError("Invalid status change")
+        
+#==================================================================================================================================================================================================================#
 def load_tasks():
     if not os.path.exists('data/tasks.json'):
         return {}
@@ -101,15 +132,11 @@ def add_task():
     print("Task added successfully.")
 
 def create_id():
-    data = load_tasks()
-    used_ids = {int(id) for id in data.keys()}
+    with open('data/task_id_counter.json', "r") as counter:
+        new_id = json.load(counter)
 
-    #Lowest available id
-    i = 1
-    while i in used_ids:
-        i += 1
-
-    return i
+    with open('data/task_id_counter.json', "w") as counter:
+        json.dump(new_id + 1, counter)
 
 def get_existing_projects():
     if not os.path.exists('data/tasks.json'):
@@ -124,3 +151,4 @@ def load_employees():
         return {}
     with open('data/employees.json', 'r', encoding='utf-8') as f:
         return json.load(f)
+    
