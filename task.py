@@ -30,7 +30,7 @@ def load_tasks():
         return {}
     
     else:
-        with open('data/employees.json', 'r', encoding='utf-8') as tasks_list:
+        with open('data/tasks.json', 'r', encoding='utf-8') as tasks_list:
             return json.load(tasks_list)
         
 def add_task():
@@ -63,7 +63,7 @@ def add_task():
 
     assignee = employees[assignee_id]["name"]
 
-    priority_num = input("Define priority (1 = LOW, 2 = MEDIUM, 3 = HIGH)")
+    priority_num = input("Define priority (1 = LOW, 2 = MEDIUM, 3 = HIGH): ")
     if priority_num not in ("1", "2", "3"):
         print("Invalid input. Task not added.")
         return

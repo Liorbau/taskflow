@@ -1,14 +1,1 @@
-{
-    "1": {
-        "name": "lior",
-        "company_id": 1,
-        "role": "WORKER",
-        "team": "alpha"
-    },
-    "2": {
-        "name": "lior",
-        "company_id": 2,
-        "role": "WORKER",
-        "team": "alpha"
-    }
-}
+{}
