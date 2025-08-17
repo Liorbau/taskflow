@@ -18,7 +18,6 @@ class Status(Enum):
 class Task:
     description: str
     id: int
-    project: str
     assignee: str
     priority: Priority
     status: Status
@@ -27,33 +26,34 @@ class Task:
 
 #Getters + Setters
 def get_task_status(task):
-    return task.Status
+    return Status[task["status"]]
 
 def set_status(task):
-    if get_task_status(task) == Status.WAITING:
-        task.status = Status.WORKING
-        print(f"Status of task {task.id} changed to WORKING")
-        return 
-    
-    elif get_task_status(task) == Status.WORKING:
-        task.status = Status.COMPLETED
+    status = get_task_status(task)
+
+    if status == Status.WAITING:
+        task["status"] = Status.WORKING.name
+        print(f"Status of task {task['id']} changed to WORKING")
+
+    elif status == Status.WORKING:
+        task["status"] = Status.COMPLETED.name
 
         with open("data/tasks_archive", "a", encoding="utf-8") as archive:
-            json.dump(task.__dict__, archive)
+            json.dump(task, archive)
             archive.write("\n")
 
-            tasks = load_tasks()
-            key = str(task.id)
-            if key in tasks:
-                del tasks[key]
-                with open("data/tasks.json", "w", encoding="utf-8") as tasks_file:
-                    json.dump(tasks, tasks_file, indent=4)
+        tasks = load_tasks()
+        key = str(task["id"])
+        if key in tasks:
+            del tasks[key]
+            with open("data/tasks.json", "w", encoding="utf-8") as tasks_file:
+                json.dump(tasks, tasks_file, indent=4)
 
-        print(f"Task {task.id} completed and archived.")
-        return
-    
+        print(f"Task {task['id']} completed and archived.")
+
     else:
         raise ValueError("Invalid status change")
+
         
 #==================================================================================================================================================================================================================#
 def load_tasks():
@@ -67,21 +67,13 @@ def load_tasks():
 def add_task():
     data = load_tasks()
     
-    id = create_id()
     description = input("Please enter a description: ")
-    projects = get_existing_projects()
-    if projects:
-        print("Existing projects:")
-        for proj in projects:
-            print(f"- {proj}")
-
-    project = input("Enter project name: ")
 
     employees = load_employees()
     if employees:
         print("Available employees:")
         for eid, info in employees.items():
-            print(f"{eid}: {info['name']} ({info['team']})")
+            print(f"{eid}: {info['name']}")
     
     else:
         print("No employees found. You must add employees first.")
@@ -112,10 +104,11 @@ def add_task():
         print("Invalid date format. Task not added.")
         return
     
+    id = create_id()
+    
     new_task = {
         "id": id,
         "description": description,
-        "project": project,
         "assignee": assignee,
         "priority": priority,
         "status": status,
@@ -138,13 +131,7 @@ def create_id():
     with open('data/task_id_counter.json', "w") as counter:
         json.dump(new_id + 1, counter)
 
-def get_existing_projects():
-    if not os.path.exists('data/tasks.json'):
-        return set()
-
-    with open('data/tasks.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-        return {task["project"] for task in data.values()}
+    return new_id
 
 def load_employees():
     if not os.path.exists('data/employees.json'):

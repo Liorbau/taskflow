@@ -14,8 +14,6 @@ class Employee:
     name: str
     company_id: int
     role: Role
-    team: str
-    # Add later tasks by employee
 
 def load_employees():
     if not os.path.exists('data/employees.json'):
@@ -25,15 +23,14 @@ def load_employees():
         with open('data/employees.json', 'r', encoding='utf-8') as employees_list:
             return json.load(employees_list)
 
-def add_employee(name: str, team: str):
+def add_employee(name: str):
     data = load_employees()
     id = create_id()
 
     employee = {
                 "name": name, 
                 "company_id": id,
-                "role": Role.WORKER.name,
-                "team": team
+                "role": Role.WORKER.name
     }
 
     data[str(id)] = employee
@@ -43,15 +40,13 @@ def add_employee(name: str, team: str):
     print("SUCCESS")
 
 def create_id():
-    data = load_employees()
-    used_ids = {int(id) for id in data.keys()}
+    with open('data/employee_id_counter.json', "r") as counter:
+        new_id = json.load(counter)
 
-    #Lowest available id
-    i = 1
-    while i in used_ids:
-        i += 1
+    with open('data/employee_id_counter.json', "w") as counter:
+        json.dump(new_id + 1, counter)
 
-    return i
+    return new_id
 
 def fire_employee(id: int):
     data = load_employees()

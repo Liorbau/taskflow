@@ -1,1 +1,12 @@
-{}
+{
+    "1": {
+        "name": "Lior",
+        "company_id": 1,
+        "role": "WORKER"
+    },
+    "2": {
+        "name": "Adi",
+        "company_id": 2,
+        "role": "WORKER"
+    }
+}
