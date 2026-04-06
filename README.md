@@ -5,7 +5,7 @@ Features:
 - Assign tasks to team members
 - Designed with OOP principles using dataclass and Enum
 
-## Coming Soon
+## Coming Soon!
 
 - API or web interface
 - JSON file persistence
